@@ -8,6 +8,28 @@
   "cache_ttl": "300s",
   "endpoints": [
     {
+      "endpoint":  "/http2-check",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "timeout": "10s",
+      "@comment": "Send HTTP request to a server which accepts only HTTP2 requests",
+      "backend": [
+        {
+          "url_pattern": "/dummy/v1/",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": [
+            "https://api.sandbox-1.edge-gateway.cloudns.ph/"
+          ],
+          "extra_config": {
+          }
+        }
+      ],
+      "extra_config": {
+      }
+    } ,
+    {
       "@comment": "Feature: Aggregation + Basic transformation (filtering & mapping) + grouping",
       "endpoint": "/git/{user}",
       "backend": [
@@ -410,6 +432,10 @@
       "TTL": 1500,
       "port": 1234,
       "token_keys": ["jti"]
+    },
+    "router": {
+      "use_h2c": true,
+      "return_error_msg": true
     }
   }
 }
